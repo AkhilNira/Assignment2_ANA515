@@ -1,0 +1,63 @@
+---
+title: "Assignment2"
+author: "Akhil Pardeshi"
+date: "6/18/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data Set Description
+This Data set consists of all the media mentions of democratic party leaders that were participating in the primaries of 2020.
+This Data is based on media mentions for 2020 Democratic primary since December 30, 2018 across CNN, Fox News, and MSNBC. The TV News archive collects data by splitting coverage into 15s clips. This Dataset is saved in a .csv format - hence separated by comma.I am hoping to answer the question of how much percentage of media coverage can be correlated by the standing of the particular politician.
+
+## Code for loading and saving data
+The Following code will help you upload data and save it as a data frame object. I used the r.csv() function to load the data.
+
+```{r, echo=TRUE}
+
+data1<- read.csv('https://raw.githubusercontent.com/fivethirtyeight/data/master/media-mentions-2020/online_weekly.csv')
+onlineW<- data.frame(data1)
+
+```
+
+## Editing Column and removing one
+
+Now, editing the percentage values and removing the "Query" column can be done with the following commands:
+
+```{r , echo=TRUE}
+
+onlineW$pct_of_all_candidate_stories<- onlineW$pct_of_all_candidate_stories*100
+
+onlineW$query <- NULL
+
+```
+
+Now the new Data frame has `r ncol(onlineW)` columns and `r nrow(onlineW)` rows.
+
+This data set can now be sorted based on the maximum percentage of candidate stories to show the top 10 entries. The folowing table shows the Date, Name and Story characteristics of the top 10 listings.
+```{r, echo=FALSE}
+#sorting data ascending by percentage values
+
+newData <- onlineW[order(-onlineW$pct_of_all_candidate_stories),]
+
+knitr::kable(newData[1:10,1:5])
+```
+
+
+This shows that Joe Biden had the most percentage of stories in the dataset.
+
+Now we can find certain summary statistics of different columns in the big dataset, which are calculated below:
+
+```{r, echo=FALSE}
+newData2<- newData[c(3:5)] 
+
+smry<- summary(newData2)
+Missing<- sum(is.na(newData2))
+
+smry
+```
+And these columns have `r Missing` missing values in each of the columns
+
